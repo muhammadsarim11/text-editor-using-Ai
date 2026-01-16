@@ -1,104 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Text Editor</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        .editor-toolbar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .editor-content {
-            width: 50%;
-            height: 300px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            outline: none;
-            overflow-y: auto;
-            font-size: 16px;
-        }
+<title>Simple To Do List</title>
 
-        button{
-            padding: 8px 15px;
-            background-color: black;
-            color: white;
-            border: none;
-            border-radius:10px;
-            outline: none;
-        }
-    </style>
+<style>
+body {
+    font-family: Arial;
+    padding: 20px;
+}
+
+input {
+    padding: 10px;
+    width: 250px;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+}
+
+.done {
+    text-decoration: line-through;
+    color: gray;
+}
+</style>
 </head>
+
 <body>
 
-    <div class="editor-toolbar">
-        <button onclick="document.execCommand('bold', false, '')">Bold</button>
-        <button onclick="document.execCommand('italic', false, '')">Italic</button>
-        <button onclick="document.execCommand('underline', false, '')">Underline</button>
-        <button onclick="document.execCommand('insertOrderedList', false, '')">Ordered List</button>
-        <button onclick="document.execCommand('insertUnorderedList', false, '')">Unordered List</button>
-        <button onclick="document.execCommand('createLink', false, prompt('Enter URL:'))">Add Link</button>
+<h2>To Do List</h2>
 
-        <button onclick="change()">change color</button>
-        <button onclick="fontI('+')">+</button>
-        <button onclick="fontd('-')">-</button> 
-    </div>
+<input type="text" id="taskInput" placeholder="Enter Task">
+<button onclick="addTask()">Add Task</button>
+<button onclick="clearAll()">Clear All</button>
 
-    <div id="editor" class="editor-content" contenteditable="true" >
-       
-    </div>
+<ul id="taskList"></ul>
 
-    <script>
-        // JavaScript can be extended to add more functionality.
-         let head = document.querySelector(".editor-content")
-var color = ["blue","green","yellow"]
-var oldnumber;
-function change(){
-    var rand = (Math.random()*4).toFixed()
+<script>
 
-    if(oldnumber==rand){
-        change()
+function addTask() {
+
+    let input = document.getElementById("taskInput");
+    let task = input.value;
+
+    if (task == "") {
+        alert("Please enter a task");
+        return;
     }
 
-    else{
+    let li = document.createElement("li");
 
-    head.style.color = color[rand];
-    oldnumber==rand;
+    li.innerText = task;
+
+    // Mark as done on click
+    li.onclick = function () {
+        li.classList.toggle("done");
     }
 
+    // Delete button
+    let delBtn = document.createElement("button");
+    delBtn.innerText = "Delete";
 
-}
-
-var fontSize = 30;
-function fontI(op){
-if(op=="+"){
-    head.style.fontSize=(fontSize+5)+'px'
-    fontSize+=5;
-}
-else{
-    head.style.fontSize -=fontSize
-}
- }
-
- function fontd(op){
-    if(op=='-'){
-        head.style.fontSize=(fontSize-5)+'px'
-        fontSize-=5;
+    delBtn.onclick = function () {
+        li.remove();
     }
 
-    else{
-    head.style.fontSize +=fontSize
+    li.appendChild(delBtn);
 
-    }
+    document.getElementById("taskList").appendChild(li);
+
+    input.value = "";
 }
 
-    </script>
+function clearAll() {
+    document.getElementById("taskList").innerHTML = "";
+}
+
+</script>
 
 </body>
 </html>
